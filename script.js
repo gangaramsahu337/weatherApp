@@ -1,26 +1,28 @@
 const apiKey = "5362bb7b3b0b2507ef393a80170c174a";
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
-const plainurl =   "https://api.openweathermap.org/data/2.5/weather?units=metric";
+const plainurl = "https://api.openweathermap.org/data/2.5/weather?units=metric";
 
 
 // Check if geolocation is supported by the browser
 if ("geolocation" in navigator) {
     // Get user's location
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var latitude = position.coords.latitude;
-      var longitude = position.coords.longitude;  
-        
-      // Call function to get weather information using latitude and longitude
-      getWeatherbyCoord(longitude, latitude);
+    navigator.geolocation.getCurrentPosition(function (position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+
+        //console.log(`longitude: ${longitude} latitude: ${latitude}`);
+
+        // Call function to get weather information using latitude and longitude
+        getWeatherbyCoord(longitude, latitude);
     });
-  } else {
+} else {
     // Geolocation is not supported by this browser
     console.log("Geolocation is not supported by your browser");
     getWeather("Delhi");
-  }  
+}
 
-  async function getWeatherbyCoord(longitude,latitude){
-  url = plainurl + `&lon=${longitude}&lat=${latitude}`;
+async function getWeatherbyCoord(longitude, latitude) {
+    url = plainurl + `&lon=${longitude}&lat=${latitude}`;
     //console.log(apiUrl);
     const responded = await fetch(url + `&appid=${apiKey}`);
     var deta = await responded.json();
@@ -59,9 +61,9 @@ if ("geolocation" in navigator) {
     const formattedDate = formatDate(currentDate);
     daydate.innerHTML = (formattedDate); // Output: "30 October 2023"
 
-    foudweatherbyCoord(longitude,latitude);
+    foudweatherbyCoord(longitude, latitude);
 
-  }
+}
 async function getWeather(city) {
     url = apiUrl + city;
     //console.log(apiUrl);
@@ -146,7 +148,7 @@ function formatDate(date) {
 }
 
 
-async function foudweatherbyCoord(longitude,latitude){
+async function foudweatherbyCoord(longitude, latitude) {
     url = plainurl + `&lon=${longitude}&lat=${latitude}`;
     //console.log(apiUrl);
     const respondedin = await fetch(url + `&appid=${apiKey}`);
