@@ -1,6 +1,67 @@
 const apiKey = "5362bb7b3b0b2507ef393a80170c174a";
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+const plainurl =   "https://api.openweathermap.org/data/2.5/weather?units=metric";
 
+
+// Check if geolocation is supported by the browser
+if ("geolocation" in navigator) {
+    // Get user's location
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;  
+        
+      // Call function to get weather information using latitude and longitude
+      getWeatherbyCoord(longitude, latitude);
+    });
+  } else {
+    // Geolocation is not supported by this browser
+    console.log("Geolocation is not supported by your browser");
+    getWeather("Delhi");
+  }  
+
+  async function getWeatherbyCoord(longitude,latitude){
+  url = plainurl + `&lon=${longitude}&lat=${latitude}`;
+    //console.log(apiUrl);
+    const responded = await fetch(url + `&appid=${apiKey}`);
+    var deta = await responded.json();
+
+
+    console.log(deta);
+    CityName.innerHTML = `${deta.name}`;
+    temp.innerHTML = `${deta.main.temp}°C`;
+    temp_min.innerHTML = `${deta.main.temp_min}°C`;
+    temp_max.innerHTML = `${deta.main.temp_max}°C`;
+    // feels_like.innerHTML=`${deta.main.feels_like}°C`;
+    humidity.innerHTML = `${deta.main.humidity}%`;
+    wind_speed.innerHTML = `${deta.wind.speed} km/h`;
+    wind_deg.innerHTML = `${deta.wind.deg}°`;
+    sunrise.innerHTML = `${new Date(deta.sys.sunrise * 1000).toLocaleTimeString()}`;
+    sunset.innerHTML = `${new Date(deta.sys.sunset * 1000).toLocaleTimeString()}`;
+    // tz.innerHTML=`${deta.timezone}`;
+    // country.innerHTML=`${deta.sys.country}`;
+    pressure.innerHTML = `${deta.main.pressure} mb`;
+    visibility.innerHTML = `${deta.visibility} m`;
+    // haze.innerHTML=`${deta.weather[0].description}`;
+    // icon.innerHTML=`${deta.weather[0].icon}`;
+    clouds.innerHTML = `${deta.clouds.all}%`;
+    icoinfo.innerText = `${deta.weather[0].main}`;
+    console.log(deta.weather[0].main);
+    ico.innerHTML = `${weatherIcons[deta.weather[0].icon]}`;
+
+    let str = "https://openweathermap.org/city/" + deta.id;
+    linkelem = document.getElementById("linkid");
+    linkelem.href = str;
+
+    // Get the current date
+    const currentDate = new Date();
+
+    // Format the date
+    const formattedDate = formatDate(currentDate);
+    daydate.innerHTML = (formattedDate); // Output: "30 October 2023"
+
+    foudweatherbyCoord(longitude,latitude);
+
+  }
 async function getWeather(city) {
     url = apiUrl + city;
     //console.log(apiUrl);
@@ -85,6 +146,22 @@ function formatDate(date) {
 }
 
 
+async function foudweatherbyCoord(longitude,latitude){
+    url = plainurl + `&lon=${longitude}&lat=${latitude}`;
+    //console.log(apiUrl);
+    const respondedin = await fetch(url + `&appid=${apiKey}`);
+    var detas = await respondedin.json();
+    temp2.innerHTML = `${detas.main.temp}°C`;
+    humidity2.innerHTML = `${detas.main.humidity}%`;
+    wind_speed2.innerHTML = `${detas.wind.speed} km/h`;
+
+    let d = new Date();
+    let s = d.getTime();
+    let sunr = detas.sys.sunrise;
+
+}
+
+
 async function foudweather(city) {
     url = apiUrl + city;
     const responsed = await fetch(url + `&appid=${apiKey}`);
@@ -109,7 +186,10 @@ submit.addEventListener('click', (e) => {
 
 })
 
-getWeather("Delhi");
+
+
+// getWeather("Delhi");
+// getWeatherbyCoord();
 
 cities = {
     1: "Delhi", 2: "Mumbai", 3: "Bangalore", 4: "Chennai", 5: "Kolkata"
