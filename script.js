@@ -2,6 +2,40 @@ const apiKey = "5362bb7b3b0b2507ef393a80170c174a";
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
 const plainurl = "https://api.openweathermap.org/data/2.5/weather?units=metric";
 
+var tryloc = 0;
+
+if ("geolocation" in navigator) {
+    navigator.permissions.query({ name: 'geolocation' }).then(function (permissionStatus) {
+        if (permissionStatus.state === 'granted') {
+            tryloc = 1;
+        } else if (permissionStatus.state === 'denied') {
+            tryloc = 0;
+        }
+    });
+}
+
+function checkLocation() {
+    // console.log(tryloc);
+
+    if ("geolocation" in navigator) {
+        navigator.permissions.query({ name: 'geolocation' }).then(function (permissionStatus) {
+            if (permissionStatus.state === 'granted' && tryloc === 0) {
+                tryloc = 1;
+                location.reload();
+            } else if (permissionStatus.state === 'denied' && tryloc === 1) {
+                tryloc = 0;
+                location.reload();
+            }
+        });
+    } else {
+        // Geolocation is not supported by this browser
+        console.log("Geolocation is not supported by your browser");
+        // Handle your logic when geolocation is not supported
+    }
+}
+
+setInterval(checkLocation, 1000);
+
 
 // Check if geolocation is supported by the browser
 if ("geolocation" in navigator) {
@@ -14,6 +48,15 @@ if ("geolocation" in navigator) {
 
         // Call function to get weather information using latitude and longitude
         getWeatherbyCoord(longitude, latitude);
+    }, function (error) {
+        if (error.code === error.PERMISSION_DENIED) {
+            // User has denied location access
+            console.log("Location is OFF");
+        } else {
+            // Some other error occurred while retrieving location
+            console.error("Error getting location: ", error);
+        }
+        getWeather("Delhi");
     });
 } else {
     // Geolocation is not supported by this browser
@@ -299,3 +342,67 @@ async function comWeather5() {
 
 }
 comWeather5();
+
+async function comWeather6() {
+    url = apiUrl + "Pune";
+    //console.log(apiUrl);
+    const response6 = await fetch(url + `&appid=${apiKey}`);
+    var data6 = await response6.json();
+    //console.log(data);
+    snr6.innerHTML = `${new Date(data6.sys.sunrise * 1000).toLocaleTimeString()}`;
+    sns6.innerHTML = `${new Date(data6.sys.sunset * 1000).toLocaleTimeString()}`;
+    t6.innerHTML = `${data6.main.temp}°C`;
+    tn6.innerHTML = `${data6.main.temp_min}°C`;
+    tm6.innerHTML = `${data6.main.temp_max}°C`;
+    fl6.innerHTML = `${data6.main.feels_like}°C`;
+    h6.innerHTML = `${data6.main.humidity}%`;
+    wd6.innerHTML = `${data6.wind.deg}`;
+    ws6.innerHTML = `${data6.wind.speed}`;
+
+    // console.log(data6.main.temp);
+
+}
+comWeather6();
+
+
+async function comWeather7() {
+    url = apiUrl + "Ahmedabad";
+    //console.log(apiUrl);
+    const response7 = await fetch(url + `&appid=${apiKey}`);
+    var data7 = await response7.json();
+    //console.log(data);
+    snr7.innerHTML = `${new Date(data7.sys.sunrise * 1000).toLocaleTimeString()}`;
+    sns7.innerHTML = `${new Date(data7.sys.sunset * 1000).toLocaleTimeString()}`;
+    t7.innerHTML = `${data7.main.temp}°C`;
+    tn7.innerHTML = `${data7.main.temp_min}°C`;
+    tm7.innerHTML = `${data7.main.temp_max}°C`;
+    fl7.innerHTML = `${data7.main.feels_like}°C`;
+    h7.innerHTML = `${data7.main.humidity}%`;
+    wd7.innerHTML = `${data7.wind.deg}`;
+    ws7.innerHTML = `${data7.wind.speed}`;
+
+    // console.log(data7.main.temp);
+
+}
+comWeather7();
+
+async function comWeather8() {
+    url = apiUrl + "jaipur";
+    //console.log(apiUrl);
+    const response8 = await fetch(url + `&appid=${apiKey}`);
+    var data8 = await response8.json();
+    //console.log(data);
+    snr8.innerHTML = `${new Date(data8.sys.sunrise * 1000).toLocaleTimeString()}`;
+    sns8.innerHTML = `${new Date(data8.sys.sunset * 1000).toLocaleTimeString()}`;
+    t8.innerHTML = `${data8.main.temp}°C`;
+    tn8.innerHTML = `${data8.main.temp_min}°C`;
+    tm8.innerHTML = `${data8.main.temp_max}°C`;
+    fl8.innerHTML = `${data8.main.feels_like}°C`;
+    h8.innerHTML = `${data8.main.humidity}%`;
+    wd8.innerHTML = `${data8.wind.deg}`;
+    ws8.innerHTML = `${data8.wind.speed}`;
+
+    // console.log(data8.main.temp);
+
+}
+comWeather8();
